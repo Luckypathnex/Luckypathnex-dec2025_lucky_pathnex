@@ -1,0 +1,125 @@
+  ##  🔹 ansible task - install nginx on lucky_pathnex_server
+
+
+---
+
+- name: install nginx on  lucky_pathnex_server
+  hosts: all
+  become: yes
+
+
+  tasks:
+     - name: install nginx
+       apt:
+         name: nginx
+	 state: present
+
+
+
+
+	 ## 🔹 terraform task - create ec2 (c5.xlarge)
+
+
+
+	 provider "aws" {
+
+	   region = "us-east-1" 
+        }
+
+
+	resource "aws_instance" "luckyec2"  {
+	  
+	  ami          = "ami-0abcd1234abcd1234"
+
+	  instance_type = "c5.xlarge"
+          
+	  tags = {
+	    
+	    name = "lucky-ec2" 
+
+	    }
+
+	  }
+
+
+
+
+   ## 🔹 kubernetes task - create nginx pod
+
+
+   api version: v1
+   
+   kind: pod
+
+   metadata: 
+
+     name: lucky-pod
+
+  spec: 
+
+    containers: 
+
+     - name: web
+       
+       image: nginx:latest
+
+       ports:
+
+         - containerport: 80
+
+
+
+  ##  🔹 shell script - ptint date & hostname  
+
+  #!/bin/bash
+
+  echo "date: $(date)"
+
+  echo "hostname: $(hostname)" 
+
+
+  # git integration 
+
+  ##  🔹 jenkins pipeline - checkout git 
+
+  we will learn how to **checkout a git repository** and list files.
+
+  
+  pipeline {
+
+      agent any stages {
+                    
+		    stage('checkout') { 
+
+		       steps {
+
+		           git branch: 'main' , url: 'git@github.com:luckypathnex/luckypathnex-dec2025_luckypathnex.git'
+
+			}
+
+		}
+
+	}
+
+}
+
+
+  ##  🔹gitlab ci - checkout git 
+
+  we will learn how to **checkout a git repository in gitlab ci**
+
+  stages:
+    
+    - checkout
+
+  git-checkout:
+
+    stage: checkout
+
+    script:
+
+    - git clone 'git@github.com:luckypathnex/luckypathnex-dec2025_luckypathnex.git'
+
+    - cd luckypathnex-dec2025_luckypathnex
+
+    - ls -la
