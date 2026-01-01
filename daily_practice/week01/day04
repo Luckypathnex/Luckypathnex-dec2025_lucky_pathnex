@@ -1,0 +1,100 @@
+     # day 04:— more packages, key pair, service
+
+## 🔹 ansible — install multiple packages
+
+---
+- name: install packages for luckypathnex
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: install tools
+      apt:
+        name:
+          - git
+          - wget
+        state: present
+
+
+## 🔹 terraform — ec2 with key pair (c6i.8xlarge)
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_key_pair" "luckypathnexkey" {
+  key_name   = "luckykey"
+  public_key = "ssh-rsa aaaa...."
+}
+
+resource "aws_instance" "luckypathnexec2" {
+  ami           = "ami-0abcd1234abcd1234"
+  instance_type = "c6i.8xlarge"
+  key_name      = aws_key_pair.luckykey.key_name
+
+  tags = {
+    name = "luckypathnex-ec2"
+  }
+}
+
+
+## 🔹 kubernetes — create clusterip service
+
+apiversion: v1
+kind: service
+metadata:
+  name: luckypathnex-service
+spec:
+  selector:
+    app: luckypathnex-app
+  ports:
+    - port: 80
+      targetport: 80
+
+
+# parallel builds
+## 🔹 jenkins pipeline — parallel build & test
+we will learn how to **run build and test in parallel**.
+
+pipeline {
+    agent any
+    stages {
+        stage('parallel tasks') {
+            parallel {
+                stage('build') {
+                    steps {
+                        sh 'mvn clean compile'
+                    }
+                }
+                stage('test') {
+                    steps {
+                        sh 'mvn test'
+                    }
+                }
+            }
+        }
+    }
+}
+
+## 🔹 gitlab ci — parallel jobs
+we will learn how to **run parallel jobs in gitlab ci**.
+
+stages:
+  - build-test
+
+maven-build:
+  stage: build-test
+  image: maven:3.8.1-jdk-17
+  script:
+    - git clone git@github.com:luckypathnex-dec2025_lucky_pathnex.git
+    - cd sample-java-app
+    - mvn clean compile
+  parallel: 1
+
+maven-test:
+  stage: build-test
+  image: maven:3.8.1-jdk-17
+  script:
+    - cd sample-java-app
+    - mvn test
+  parallel: 1
