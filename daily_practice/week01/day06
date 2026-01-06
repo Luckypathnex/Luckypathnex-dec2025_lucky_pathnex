@@ -1,0 +1,91 @@
+
+# day 06 — debug day
+
+fix these broken files:
+
+## 🔹 ansible (broken)
+
+- name install nginx
+ hosts all
+ become yes
+ tasks:
+  -name: install nginx
+  yum:
+    name nginx
+    state present
+
+
+## 🔹 terraform (broken)
+
+resource "aws_instance" "brokenec2" {
+  ami = "ami-0xyz"
+  instance_type = t2.micro
+tags {
+ name = "broken"
+}
+}
+
+## 🔹 kubernetes (broken)
+
+apiversion v1
+kind pod
+metadata:
+ name luckypathnex
+spec
+ containers:
+   - name app
+     image nginx
+
+
+
+#  debugging pipelines
+## 🔹 jenkins pipeline — debugging
+we will learn how to **fix broken stages and handle errors**.
+
+pipeline {
+    agent any
+    stages {
+        stage('checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/luckypathnex/sample-java-app.git'
+            }
+        }
+        stage('build') {
+            steps {
+                sh '''
+                mvn clean compile || { echo "compile failed"; exit 1; }
+                '''
+            }
+        }
+        stage('test') {
+            steps {
+                sh '''
+                mvn test || { echo "tests failed"; exit 1; }
+                '''
+            }
+        }
+    }
+}
+
+## 🔹 gitlab ci — debuggin
+we will learn how to **handle job failures and exit codes**.
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  image: maven:3.8.1-jdk-17
+  script:
+    - git clone https://github.com/luckypathnex/sample-java-app.git
+    - cd sample-java-app
+    - mvn clean compile || { echo "compile failed"; exit 1; }
+
+test:
+  stage: test
+  image: maven:3.8.1-jdk-17
+  script:
+    - cd sample-java-app
+    - mvn test || { echo "tests failed"; exit 1; }
+
