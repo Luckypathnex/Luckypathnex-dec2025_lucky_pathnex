@@ -1,0 +1,100 @@
+     
+ # day 05 — handlers, user-data, resource limits
+
+ ## 🔹 ansible — handler to restart nginx
+
+ ---
+ - name: manage nginx
+   hosts: all
+   become: yes
+
+   tasks:
+     - name: update config file
+       copy:
+         src: index.html
+         dest: /usr/share/nginx/html/index.html
+       notify: restart nginx
+
+   handlers:
+     - name: restart nginx
+       service:
+         name: nginx
+         state: restarted
+
+
+ ## 🔹 terraform — ec2 with user data (c6a.12xlarge)
+
+ resource "aws_instance" "luckypathnexec2" {
+   ami           = "ami-0abcd1234abcd1234"
+   instance_type = "c6a.12xlarge"
+
+   user_data = <<eof
+ #!/bin/bash
+ yum install -y httpd
+ systemctl start httpd
+ eof
+
+   tags = {
+     name = "luckypathnex-ec2"
+   }
+ }
+
+
+ ## 🔹 kubernetes — resource limits
+
+ apiversion: v1
+ kind: pod
+ metadata:
+   name: luckypathnex-limited-pod
+ spec:
+   containers:
+     - name: app
+       image: nginx
+       resources:
+          limits:
+           memory: "256mi"
+           cpu: "500m"
+
+
+ # day 05 — environment variables
+
+ ## 🔹 jenkins pipeline — use environment variables 
+ we will learn how to **use environment variables in jenkins pipelines**.
+
+ pipeline {
+     agent any
+     environment {
+         institute_name = "luckypathnex"
+     }
+     stages {
+         stage('print') {
+             steps {
+                 sh 'echo "welcome to $institute_name devops training"'
+             }
+         } 
+         stage('build') {
+             steps {
+                 sh 'mvn clean package -dinstitute.name=$institute_name'
+             }
+         }
+     }
+ } 
+
+ ## 🔹 gitlab ci — use environment variables
+ we will learn how to **use ci variables in gitlab pipelines**.
+
+ stages:
+   - build
+
+ variables:
+   institute_name: "luckypathnex"
+
+ build:
+   stage: build
+   image: maven:3.8.1-jdk-17
+   script:
+     - git clone https://github.com/luckypathnex/sample-java-app.git
+     - cd sample-java-app
+     - echo "welcome to $institute_name devops training"
+     - mvn clean package -dinstitute.name=$institute_name
+
