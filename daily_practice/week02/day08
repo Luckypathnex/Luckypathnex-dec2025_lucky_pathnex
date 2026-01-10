@@ -35,7 +35,7 @@
 
 
 
-	 ## 🔹 terraform — create VPC + subnet
+	 ##  terraform — create VPC + subnet
 
 	   provider "aws" {
 	    
@@ -76,7 +76,7 @@
 
 
 
-       ## 🔹 Kubernetes — Add Liveness & Readiness Probes
+       ##  Kubernetes — Add Liveness & Readiness Probes
 
        apiVersion: v1
        kind: Pod
@@ -98,7 +98,7 @@
                initialDelaySeconds: 3
 
 
-       ## 🔹 Shell Script — Loop Through List
+       ##  Shell Script — Loop Through List
 
        #!/bin/bash
 
@@ -109,7 +109,7 @@
 
        # Conditional Stages
 
-       ## 🔹 Jenkins Pipeline — Conditional Execution
+       ##  Jenkins Pipeline — Conditional Execution
        we will learn how to **run stages based on branch or parameter conditions**.
 
        pipeline {
@@ -145,7 +145,7 @@
            }
        }
 
-       ## 🔹 GitLab CI — Conditional Jobs
+       ##  GitLab CI — Conditional Jobs
        we will learn how to **run jobs based on variables or branches**.
 
        stages:
