@@ -50,7 +50,7 @@
 
 
 
-  ## 🔹 kubernetes — deployment with 2 replicas
+  ##  kubernetes — deployment with 2 replicas
 
 
     api versions: app/v1
@@ -95,7 +95,7 @@
 
 
 
-	    ## 🔹 shell script — print date & uptime
+	    ##  shell script — print date & uptime
 
 
 	       #!bin/bash
@@ -108,7 +108,7 @@
 
 	       # parameterized builds
 
-## 🔹 jenkins pipeline — parameterized
+##  jenkins pipeline — parameterized
 we will learn how to **create parameterized builds in Jenkins**.
 
 pipeline {
@@ -133,7 +133,7 @@ pipeline {
     }
 }
 
-## 🔹 gitLab CI — parameterized via variables
+##  gitLab CI — parameterized via variables
 you will learn how to **use variables to parameterize GitLab jobs**.
 
 stages:
