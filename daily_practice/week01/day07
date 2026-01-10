@@ -1,0 +1,150 @@
+      
+
+   ## ansible task - install nginx on lucky server
+
+
+      ---
+
+
+      -  name: install nginx on lucky server
+
+         host: all
+
+	 become: yes
+
+
+
+	 task:
+
+	    name: install nginx
+
+	    yum:
+
+	      name: nginx
+
+	      state: present
+
+
+   ##terraform: create EC2 on lucky instance
+
+       provider "aws"{
+
+        region = "us east-1"
+
+	}
+
+	 resource "aws_instance"  "lucky-EC2" {
+
+	  ami          = "ami-0abcd1234abcd1234"
+
+	  instane_type = "c5.xlarge"
+
+	  tags = {
+
+	  name = "lucky-EC2"
+
+
+	  }
+
+	}
+
+
+
+  ## 🔹 kubernetes — deployment with 2 replicas
+
+
+    api versions: app/v1
+
+    kind: deployment
+
+    metadata:
+
+      name: lucky-deployment
+
+    spec: 
+
+      replicas: 2
+
+      selector:
+
+        matchlabels:
+
+	 name:lucky app
+
+     template:
+
+
+      metadata:
+
+       labels:
+
+        app: lucky-app
+
+
+      spec:
+
+       containers:
+
+        - name: app
+
+	  image: nginx
+
+	  ports:
+
+	   - container port: 80
+
+
+
+	    ## 🔹 shell script — print date & uptime
+
+
+	       #!bin/bash
+
+	       echo "date:$(date)"
+
+	       echo "uptime:$(uptime -p)"
+
+
+
+	       # parameterized builds
+
+## 🔹 jenkins pipeline — parameterized
+we will learn how to **create parameterized builds in Jenkins**.
+
+pipeline {
+    agent any
+    parameters {
+        string(name: 'ENVIRONMENT', defaultValue: 'dev', description: 'Deployment Environment')
+    }
+    environment {
+        INSTITUTE_NAME = "lucky"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/luckyPathnex/sample-java-app.git'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'echo "Deploying to $ENVIRONMENT by $INSTITUTE_NAME"'
+            }
+        }
+    }
+}
+
+## 🔹 gitLab CI — parameterized via variables
+you will learn how to **use variables to parameterize GitLab jobs**.
+
+stages:
+  - deploy
+
+variables:
+  INSTITUTE_NAME: "Pathnex"
+  ENVIRONMENT: "dev"
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "Deploying to $ENVIRONMENT by $INSTITUTE_NAme
